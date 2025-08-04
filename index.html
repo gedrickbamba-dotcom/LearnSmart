@@ -201,26 +201,9 @@
     // Show a new fact every 3 seconds
     showFact(); 
     setInterval(showFact, 3000);
-</script>
-<!-- Toggle Button -->
-<button onclick="toggleBot()" style="position:fixed; bottom:20px; right:20px; padding:10px 15px;">
-    Open School Bot
-</button>
-
 <style>
-    #chatbot {<script>
-    function toggleBot() {
-        const bot = document.getElementById('chatbot');
-        const button = document.querySelector('button[onclick="toggleBot()"]');
-        
-        bot.classList.toggle('open');
-        if (bot.classList.contains('open')) {
-            button.textContent = "Close School Bot";
-        } else {
-            button.textContent = "Open School Bot";
-        }
-    }
-</script>
+    /* Chatbot style */
+    #chatbot {
         position: fixed;
         bottom: 70px;
         right: -300px; /* Hidden off-screen */
@@ -236,19 +219,50 @@
     #chatbot.open {
         right: 20px; /* Slide into view */
     }
-</style>!-- Chatbot Box -->
+
+    #chatbox {
+        height: 200px;
+        overflow-y: auto;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    #userInput {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-top: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+</style>
+
+<!-- Toggle Button -->
+<button id="botButton" onclick="toggleBot()" style="position:fixed; bottom:20px; right:20px; padding:10px 15px;">
+    Open School Bot
+</button>
+
+<!-- Chatbot Box -->
 <div id="chatbot">
     <div style="background:#4CAF50; color:white; padding:10px; border-radius:10px 10px 0 0;">School Bot</div>
-    <div id="chatbox" style="height:200px; overflow-y:auto; padding:10px; font-size:14px;">
-        <div>Hi! Ask me something about school.</div>
+    <div id="chatbox">
+        <div><b>Bot:</b> Before we start, answer this: Who is Carl Panganiban?</div>
     </div>
-    <input id="userInput" type="text" placeholder="Type a question..." style="width:100%; padding:10px; border:none; border-top:1px solid #ccc; box-sizing:border-box;">
+    <input id="userInput" type="text" placeholder="Type your answer..." disabled>
 </div>
 
 <script>
+    let verified = false;
+
     function toggleBot() {
         const bot = document.getElementById('chatbot');
+        const button = document.getElementById('botButton');
         bot.classList.toggle('open');
+
+        if (bot.classList.contains('open')) {
+            button.textContent = "Close School Bot";
+        } else {
+            button.textContent = "Open School Bot";
+        }
     }
 
     const chatbox = document.getElementById('chatbox');
@@ -256,17 +270,31 @@
 
     userInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && userInput.value.trim() !== '') {
-            let question = userInput.value.toLowerCase();
-            chatbox.innerHTML += `<div><b>You:</b> ${question}</div>`;
+            let message = userInput.value.trim();
+            chatbox.innerHTML += `<div><b>You:</b> ${message}</div>`;
             userInput.value = '';
 
-            let answer = "I don't understand that question.";
-            if (question.includes("grades")) answer = "Teachers calculate grades using Written Works (30%), Performance Tasks (50%), and Quarterly Assessment (20%).";
-            else if (question.includes("study tips")) answer = "Review regularly, manage your time, and get enough sleep.";
-            else if (question.includes("hello")) answer = "Hello! How can I help you with school today?";
+            if (!verified) {
+                if (message.toLowerCase() === "teacher" || message.toLowerCase() === "sir carl panganiban") {
+                    chatbox.innerHTML += `<div><b>Bot:</b> Correct! You may now ask me anything about school.</div>`;
+                    userInput.placeholder = "Type a question...";
+                    userInput.disabled = false;
+                    verified = true;
+                } else {
+                    chatbox.innerHTML += `<div><b>Bot:</b> Wrong answer. Try again: Who is Carl Panganiban?</div>`;
+                }
+            } else {
+                let answer = "I don't understand that question.";
+                if (message.toLowerCase().includes("grades")) answer = "Teachers calculate grades using Written Works (30%), Performance Tasks (50%), and Quarterly Assessment (20%).";
+                else if (message.toLowerCase().includes("study tips")) answer = "Review regularly, manage your time, and get enough sleep.";
+                else if (message.toLowerCase().includes("hello")) answer = "Hello! How can I help you with school today?";
 
-            chatbox.innerHTML += `<div><b>Bot:</b> ${answer}</div>`;
-            chatbox.scrollTop = chatbox.scrollHeight;
+                chatbox.innerHTML += `<div><b>Bot:</b> ${answer}</div>`;
+                chatbox.scrollTop = chatbox.scrollHeight;
+            }
         }
     });
+
+    // Disable input until verification
+    userInput.disabled = true;
 </script>
