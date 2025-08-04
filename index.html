@@ -208,7 +208,19 @@
 </button>
 
 <style>
-    #chatbot {
+    #chatbot {<script>
+    function toggleBot() {
+        const bot = document.getElementById('chatbot');
+        const button = document.querySelector('button[onclick="toggleBot()"]');
+        
+        bot.classList.toggle('open');
+        if (bot.classList.contains('open')) {
+            button.textContent = "Close School Bot";
+        } else {
+            button.textContent = "Open School Bot";
+        }
+    }
+</script>
         position: fixed;
         bottom: 70px;
         right: -300px; /* Hidden off-screen */
