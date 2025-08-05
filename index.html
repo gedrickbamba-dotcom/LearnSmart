@@ -1,181 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LearnSmart</title>
-    <style>
-        /* Basic Theme */
-        * {margin: 0; padding: 0; box-sizing: border-box;}
-        body {
-            font-family: Arial, sans-serif;
-            background: black;
-            color: #00ffff;
-            overflow-x: hidden;
-        }
-
-        /* Glass Panels */
-        .section {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-            margin: 2rem;
-            border-radius: 15px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px #00ffff;
-        }
-
-        .active { display: block; animation: fadeIn 0.6s ease; }
-        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-
-        button {
-            background: black;
-            color: #00ffff;
-            border: 1px solid #00ffff;
-            padding: 10px 15px;
-            margin-top: 10px;
-            cursor: pointer;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #00ffff;
-            transition: 0.3s;
-        }
-        button:hover { background: #00ffff; color: black; }
-
-        /* Navigation */
-        #nav {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Particle background (simple CSS animation) */
-        .particles {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(0,255,255,0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: moveBg 10s linear infinite;
-            z-index: -1;
-        }
-        @keyframes moveBg {
-            from {background-position: 0 0;}
-            to {background-position: 100px 100px;}
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Portal</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: white;
+        color: #333;
+        overflow: hidden;
+    }
+    #normalContent, #typingEffect, #hackerVideo, #codeRain, #finalMessage {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    #normalContent { display: flex; flex-direction: column; }
+    #typingEffect {
+        font-family: monospace;
+        background: black;
+        color: #0f0;
+        padding: 20px;
+        font-size: 18px;
+    }
+    #hackerVideo video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    #codeRain {
+        font-family: monospace;
+        background: black;
+        color: #0f0;
+        font-size: 14px;
+        white-space: pre-wrap;
+        overflow-y: scroll;
+        padding: 10px;
+    }
+    #finalMessage {
+        flex-direction: column;
+        background: black;
+        color: red;
+        font-size: 28px;
+        font-weight: bold;
+        animation: blink 1s infinite;
+    }
+    #finalMessage img {
+        margin-top: 20px;
+        max-width: 200px;
+        border: 2px solid red;
+    }
+    @keyframes blink {
+        50% { opacity: 0; }
+    }
+</style>
 </head>
 <body>
-    <div class="particles"></div>
 
-    <!-- Sections -->
-    <div id="intro" class="section active">
-        <h1>Welcome to LearnSmart</h1>
-        <p>Enter your name to begin:</p>
-        <input type="text" id="username" placeholder="Your name">
-        <button onclick="startMission()">Start</button>
-    </div>
+<!-- Normal-looking student page -->
+<div id="normalContent">
+    <h1>Welcome to the Student Portal</h1>
+    <p>Access your grades, notes, and school updates here.</p>
+</div>
 
-    <div id="grades" class="section">
-        <h2>Mission 1: Calculate Your Grades</h2>
-        <p>Formula: (WW × 0.30) + (PT × 0.50) + (QA × 0.20)</p>
-        <input type="number" id="ww" placeholder="Written Works (0-100)">
-        <input type="number" id="pt" placeholder="Performance Tasks (0-100)">
-        <input type="number" id="qa" placeholder="Quarterly Assessment (0-100)">
-        <button onclick="calculateGrade()">Calculate</button>
-        <p id="gradeResult"></p>
-        <button onclick="nextMission('essentials')">Next Mission</button>
-    </div>
+<!-- Fake keyboard typing -->
+<div id="typingEffect"></div>
 
-    <div id="essentials" class="section">
-        <h2>Mission 2: Essential School Tips</h2>
-        <ul style="text-align:left;display:inline-block;">
-            <li>Bring all necessary materials.</li>
-            <li>Manage your time effectively.</li>
-            <li>Participate actively in class.</li>
-            <li>Review lessons regularly.</li>
-            <li>Take care of your health.</li>
-        </ul>
-        <button onclick="nextMission('facts')">Next Mission</button>
-    </div>
+<!-- Hacker video -->
+<div id="hackerVideo">
+    <video autoplay muted playsinline>
+        <source src="mixkit-hacker-with-a-digital-glitch-over-his-face-46627-hd-ready.mp4" type="video/mp4">
+    </video>
+</div>
 
-    <div id="facts" class="section">
-        <h2>Mission 3: Unlimited Facts</h2>
-        <p id="factDisplay">Tap for a fact!</p>
-        <button onclick="showFact()">New Fact</button>
-        <button onclick="nextMission('games')">Next Mission</button>
-    </div>
+<!-- Code rain -->
+<div id="codeRain"></div>
 
-    <div id="games" class="section">
-        <h2>Mission 4: Fun Games</h2>
-        <button onclick="playMemory()">Play Memory Game</button>
-        <button onclick="playQuiz()">Take a Quick Quiz</button>
-        <button onclick="nextMission('chatbot')">Final Mission</button>
-        <p id="gameArea"></p>
-    </div>
+<!-- Final prank message -->
+<div id="finalMessage">
+    <p>CONGRATULATIONS! YOU'VE BEEN HACKED! 😂</p>
+    <img src="IMG_20250804_233522.jpg" alt="Prank Image">
+</div>
 
-    <div id="chatbot" class="section">
-        <h2>Final Mission: School Bot</h2>
-        <div id="chatbox" style="background:white;color:black;padding:10px;height:200px;overflow-y:auto;border-radius:10px;"></div>
-        <input type="text" id="userInput" placeholder="Type here..." disabled>
-    </div>
+<!-- Sounds -->
+<audio id="typingSound" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAgD4AAIA+AAABAAgAZGF0YUoAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA" preload="auto"></audio>
+<audio id="hackerSound" src="data:audio/wav;base64,UklGRlIAAABXQVZFZm10IBAAAAABAAEAgLsAAIAvAAABAAgAZGF0YUQAAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA==" preload="auto"></audio>
 
-    <!-- Navigation Buttons -->
-    <div id="nav">
-        <button onclick="goTo('intro')">Intro</button>
-        <button onclick="goTo('grades')">Grades</button>
-        <button onclick="goTo('essentials')">Tips</button>
-        <button onclick="goTo('facts')">Facts</button>
-        <button onclick="goTo('games')">Games</button>
-        <button onclick="goTo('chatbot')">Bot</button>
-    </div>
+<script>
+    const typingText = [
+        "Initializing secure student portal...",
+        "Verifying credentials...",
+        "Establishing remote connection...",
+        "Accessing personal data...",
+        "Injecting backdoor...",
+        "System compromised!"
+    ];
 
-    <script>
-        let currentUser = '';
-        let verified = false;
-        const facts = [
-            "Did you know? Your brain uses about 20% of your body’s energy.",
-            "Writing notes by hand can improve memory retention.",
-            "Pomodoro Technique: 25 minutes study, 5 minutes break boosts focus.",
-            "Water makes up about 73% of the human brain.",
-            "The longest recorded lecture lasted 139 hours!"
-        ];
+    const typingDiv = document.getElementById('typingEffect');
+    const codeRain = document.getElementById('codeRain');
+    const typingSound = document.getElementById('typingSound');
+    const hackerSound = document.getElementById('hackerSound');
 
-        function startMission() {
-            currentUser = document.getElementById('username').value || 'Student';
-            document.getElementById('intro').innerHTML = `<h1>Welcome, ${currentUser}!</h1><p>Get ready for Mission 1.</p><button onclick="goTo('grades')">Begin Mission 1</button>`;
+    function startPrank() {
+        // Step 1: Show typing effect
+        document.getElementById('normalContent').style.display = "none";
+        typingDiv.style.display = "block";
+        showTypingEffect();
+    }
+
+    function showTypingEffect(index = 0) {
+        if (index < typingText.length) {
+            typingSound.currentTime = 0;
+            typingSound.play();
+            typingDiv.innerHTML += typingText[index] + "<br>";
+            setTimeout(() => showTypingEffect(index + 1), 1500);
+        } else {
+            setTimeout(() => {
+                typingDiv.style.display = "none";
+                document.getElementById('hackerVideo').style.display = "flex";
+                hackerSound.play();
+                setTimeout(showCodeRain, 5000); // show code after video plays for a while
+            }, 1000);
         }
+    }
 
-        function calculateGrade() {
-            let ww = parseFloat(document.getElementById('ww').value) || 0;
-            let pt = parseFloat(document.getElementById('pt').value) || 0;
-            let qa = parseFloat(document.getElementById('qa').value) || 0;
-            let result = (ww*0.3) + (pt*0.5) + (qa*0.2);
-            document.getElementById('gradeResult').innerText = `Your Final Grade: ${result.toFixed(2)}`;
-        }
+    function showCodeRain() {
+        document.getElementById('hackerVideo').style.display = "none";
+        codeRain.style.display = "block";
+        let lines = "";
+        const interval = setInterval(() => {
+            lines += Math.random().toString(36).substring(2, 30) + "\n";
+            codeRain.textContent = lines;
+            if (lines.length > 2000) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    codeRain.style.display = "none";
+                    document.getElementById('finalMessage').style.display = "flex";
+                }, 1000);
+            }
+        }, 50);
+    }
 
-        function showFact() {
-            let randomFact = facts[Math.floor(Math.random()*facts.length)];
-            document.getElementById('factDisplay').innerText = randomFact;
-        }
-
-        function playMemory() {
-            document.getElementById('gameArea').innerText = "Memory Game coming soon!";
-        }
-
-        function playQuiz() {
-            document.getElementById('gameArea').innerText = "Quiz feature coming soon!";
-        }
-
-        function nextMission(next) { goTo(next); }
-
-        function goTo(section) {
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(section).classList.add('active');
-        }
-    </script>
+    // Start prank after a short delay (looks like a normal page first)
+    setTimeout(startPrank, 3000);
+</script>
 </body>
 </html>
