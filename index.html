@@ -5,133 +5,173 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Student Portal</title>
 <style>
-    body {
+    /* Basic student-friendly style */
+    body, html {
         margin: 0;
+        padding: 0;
         font-family: Arial, sans-serif;
-        background: #f9f9f9;
-        transition: all 1s ease;
+        overflow: hidden;
+        background: white;
+        color: #333;
     }
-    header {
-        background: #4CAF50;
-        color: white;
+    .homepage {
         text-align: center;
-        padding: 2rem;
+        padding: 50px;
     }
-    section {
-        padding: 2rem;
-        text-align: center;
-    }
-    #hackerVideo, #matrixEffect {
+
+    /* Hacker sequence */
+    .hacker-screen, .matrix, .final-message {
         display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        z-index: 1000;
-        background: black;
-    }
-    #hackerVideo video {
-        width: 80%;
-        max-width: 500px;
-        display: block;
-        margin: auto;
-        margin-top: 20%;
-        border: 3px solid #00ff00;
-    }
-    #matrixCanvas {
-        width: 100%;
-        height: 100%;
-        display: block;
-        background: black;
-    }
-    #finalMessage {
-        display: none;
-        position: fixed;
+        position: absolute;
         top: 0; left: 0;
         width: 100%; height: 100%;
         background: black;
         color: #00ff00;
-        font-size: 2rem;
-        text-align: center;
-        padding-top: 40%;
-        z-index: 2000;
     }
-    #finalMessage img {
+
+    /* Mobile keyboard simulation */
+    .keyboard {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: #222;
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        padding: 5px;
+    }
+    .key {
+        background: #333;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        margin: 2px;
+        border-radius: 4px;
+    }
+    .key.active {
+        background: #00ff00;
+        color: black;
+    }
+
+    /* Hacker video */
+    .video-container {
+        position: absolute;
+        top: 20%;
+        left: 10%;
+        width: 80%;
+        max-width: 400px;
+        display: none;
+    }
+    video {
+        width: 100%;
+        border: 2px solid #00ff00;
+    }
+
+    /* Matrix effect */
+    canvas {
         display: block;
-        max-width: 80%;
-        margin: 1rem auto;
+    }
+
+    /* Final message */
+    .final-message {
+        background: url('IMG_20250804_233522.jpg') center/cover no-repeat;
+        color: white;
+        font-size: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-weight: bold;
     }
 </style>
 </head>
 <body>
-    <!-- Normal-looking page -->
-    <header>
-        <h1>Welcome to Student Portal</h1>
-        <p>Access your school resources here</p>
-    </header>
-    <section>
-        <p>Loading modules...</p>
-    </section>
 
-    <!-- Hacker Video -->
-    <div id="hackerVideo">
-        <video id="videoFile" autoplay></video>
-        <audio id="hackerAudio" autoplay></audio>
-    </div>
+<!-- Homepage -->
+<div class="homepage">
+    <h1>Welcome to the Student Portal</h1>
+    <p>Loading your dashboard...</p>
+</div>
 
-    <!-- Matrix Effect -->
-    <div id="matrixEffect">
-        <canvas id="matrixCanvas"></canvas>
-    </div>
+<!-- Hacker screen -->
+<div class="hacker-screen">
+    <div id="hacker-text" style="padding:20px; font-size:1.2rem;"></div>
+    <div class="keyboard" id="keyboard"></div>
+</div>
 
-    <!-- Final Message -->
-    <div id="finalMessage">
-        <p>CONGRATULATIONS! YOU’VE BEEN HACKED! 😂</p>
-        <img src="IMG_20250804_233522.jpg" alt="Prank Image">
-    </div>
+<!-- Hacker video -->
+<div class="video-container" id="videoContainer">
+    <video id="hackerVideo">
+        <source src="mixkit-hacker-with-a-digital-glitch-over-his-face-46627-hd-ready.mp4" type="video/mp4">
+    </video>
+    <audio id="hackerAudio">
+        <source src="https://cdn.pixabay.com/audio/2024/10/16/audio_example.mp3" type="audio/mp3">
+    </audio>
+</div>
+
+<!-- Matrix effect -->
+<canvas id="matrix" class="matrix"></canvas>
+
+<!-- Final message -->
+<div class="final-message" id="finalMessage">
+    <p>CONGRATULATIONS — YOU’VE BEEN HACKED!</p>
+</div>
 
 <script>
-    // Step 1: After 5s, fake keyboard typing
+    // Step 1: Show homepage, then transition
     setTimeout(() => {
-        document.body.style.background = "#000";
-        document.body.innerHTML = "<pre id='typing'></pre>";
-        const typingText = "Accessing system...\nDecrypting files...\nBypassing security...\n";
-        let index = 0;
-        const typingEl = document.getElementById('typing');
-        const typeInterval = setInterval(() => {
-            typingEl.textContent += typingText[index];
-            index++;
-            if (index >= typingText.length) {
-                clearInterval(typeInterval);
+        document.querySelector('.homepage').style.display = 'none';
+        document.querySelector('.hacker-screen').style.display = 'block';
+        startKeyboard();
+    }, 3000);
 
-                // Step 2: Show hacker video
-                setTimeout(showHackerVideo, 3000);
+    // Step 2: Fake mobile keyboard typing
+    const keys = 'QWERTYUIOPASDFGHJKLZXCVBNM'.split('');
+    const keyboard = document.getElementById('keyboard');
+    keys.forEach(k => {
+        const keyDiv = document.createElement('div');
+        keyDiv.classList.add('key');
+        keyDiv.textContent = k;
+        keyboard.appendChild(keyDiv);
+    });
+    const hackerText = document.getElementById('hacker-text');
+    function startKeyboard() {
+        let text = '';
+        let i = 0;
+        const keyDivs = document.querySelectorAll('.key');
+        const interval = setInterval(() => {
+            const randomKey = Math.floor(Math.random() * keyDivs.length);
+            keyDivs.forEach(k => k.classList.remove('active'));
+            keyDivs[randomKey].classList.add('active');
+            text += keys[randomKey];
+            hackerText.textContent = "Accessing system: " + text;
+            i++;
+            if (i > 30) {
+                clearInterval(interval);
+                showHackerVideo();
             }
-        }, 100);
-    }, 5000);
-
-    function showHackerVideo() {
-        document.body.innerHTML = "";
-        const hackerDiv = document.getElementById('hackerVideo');
-        hackerDiv.style.display = "block";
-
-        // Load video & audio
-        document.getElementById('videoFile').src = "mixkit-hacker-with-a-digital-glitch-over-his-face-46627-hd-ready.mp4";
-        document.getElementById('hackerAudio').src = "whispered-hello-goodbye-german-english-31467.mp3";
-
-        // After video ends → Matrix effect
-        document.getElementById('videoFile').onended = startMatrix;
+        }, 200);
     }
 
-    function startMatrix() {
-        document.getElementById('hackerVideo').style.display = "none";
-        const matrixDiv = document.getElementById('matrixEffect');
-        matrixDiv.style.display = "block";
+    // Step 3: Show hacker video + audio
+    function showHackerVideo() {
+        document.querySelector('.keyboard').style.display = 'none';
+        const videoContainer = document.getElementById('videoContainer');
+        videoContainer.style.display = 'block';
+        const video = document.getElementById('hackerVideo');
+        const audio = document.getElementById('hackerAudio');
+        video.play();
+        audio.play();
+        video.onended = () => startMatrix();
+    }
 
-        const canvas = document.getElementById('matrixCanvas');
+    // Step 4: Matrix effect
+    function startMatrix() {
+        document.querySelector('.hacker-screen').style.display = 'none';
+        const canvas = document.getElementById('matrix');
+        canvas.style.display = 'block';
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         const fontSize = 16;
         const columns = canvas.width / fontSize;
@@ -149,15 +189,16 @@
                 drops[i]++;
             }
         }
-        const interval = setInterval(draw, 50);
+        const interval = setInterval(draw, 33);
 
-        // After 7s → Final prank message
+        // After 5 seconds, show final message
         setTimeout(() => {
             clearInterval(interval);
-            matrixDiv.style.display = "none";
-            document.getElementById('finalMessage').style.display = "block";
-        }, 7000);
+            canvas.style.display = 'none';
+            document.getElementById('finalMessage').style.display = 'flex';
+        }, 5000);
     }
 </script>
+
 </body>
 </html>
