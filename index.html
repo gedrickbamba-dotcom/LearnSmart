@@ -222,4 +222,73 @@
 
     // Disable input until verification
     userInput.disabled = true;
+</script
+    <section id="memory-game" style="text-align:center; padding:2rem;">
+    <h2>Memory Game</h2>
+    <p>Match all the pairs!</p>
+    <div id="game-board" style="display:grid; grid-template-columns: repeat(4, 80px); gap:10px; justify-content:center; margin-top:1rem;"></div>
+    <p id="status" style="font-weight:bold; margin-top:1rem;"></p>
+</section>
+
+<script>
+    const cardsArray = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D'];
+    let shuffled = cardsArray.sort(() => 0.5 - Math.random());
+    let firstCard = null;
+    let secondCard = null;
+    let matchedPairs = 0;
+
+    const gameBoard = document.getElementById('game-board');
+    const status = document.getElementById('status');
+
+    shuffled.forEach((letter, index) => {
+        const card = document.createElement('div');
+        card.textContent = '';
+        card.style.width = '80px';
+        card.style.height = '80px';
+        card.style.background = '#4CAF50';
+        card.style.color = 'white';
+        card.style.display = 'flex';
+        card.style.alignItems = 'center';
+        card.style.justifyContent = 'center';
+        card.style.fontSize = '24px';
+        card.style.cursor = 'pointer';
+        card.style.borderRadius = '10px';
+        card.dataset.letter = letter;
+        card.dataset.flipped = 'false';
+
+        card.addEventListener('click', () => flipCard(card));
+
+        gameBoard.appendChild(card);
+    });
+
+    function flipCard(card) {
+        if (card.dataset.flipped === 'true' || secondCard) return;
+
+        card.textContent = card.dataset.letter;
+        card.dataset.flipped = 'true';
+
+        if (!firstCard) {
+            firstCard = card;
+        } else {
+            secondCard = card;
+            setTimeout(checkMatch, 700);
+        }
+    }
+
+    function checkMatch() {
+        if (firstCard.dataset.letter === secondCard.dataset.letter) {
+            matchedPairs++;
+            if (matchedPairs === cardsArray.length / 2) {
+                status.textContent = "You win!";
+            }
+        } else {
+            firstCard.textContent = '';
+            secondCard.textContent = '';
+            firstCard.dataset.flipped = 'false';
+            secondCard.dataset.flipped = 'false';
+        }
+
+        firstCard = null;
+        secondCard = null;
+    }
 </script>
