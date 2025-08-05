@@ -5,413 +5,177 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearnSmart</title>
     <style>
-        /* Reset and Global */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Basic Theme */
+        * {margin: 0; padding: 0; box-sizing: border-box;}
         body {
             font-family: Arial, sans-serif;
-            color: #00ffff;
             background: black;
+            color: #00ffff;
             overflow-x: hidden;
-            scroll-behavior: smooth;
         }
 
-        /* Loading Screen */
-        #loading-screen {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+        /* Glass Panels */
+        .section {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            margin: 2rem;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px #00ffff;
+        }
+
+        .active { display: block; animation: fadeIn 0.6s ease; }
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+
+        button {
             background: black;
             color: #00ffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            z-index: 1000;
-            animation: fadeOut 1s ease forwards;
-            animation-delay: 3s;
+            border: 1px solid #00ffff;
+            padding: 10px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #00ffff;
+            transition: 0.3s;
         }
-
-        @keyframes fadeOut {
-            to { opacity: 0; visibility: hidden; }
-        }
-
-        /* Animated Background Lines */
-        .background-lines {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            background: linear-gradient(90deg, transparent, rgba(0,255,255,0.1), transparent);
-            background-size: 200% 100%;
-            animation: moveLines 6s linear infinite;
-        }
-
-        @keyframes moveLines {
-            0% { background-position: 0 0; }
-            100% { background-position: 200% 0; }
-        }
+        button:hover { background: #00ffff; color: black; }
 
         /* Navigation */
-        nav {
+        #nav {
             position: fixed;
-            top: 0; width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #00ffff;
-            display: flex; justify-content: center; gap: 20px;
-            padding: 10px;
-            z-index: 10;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
         }
 
-        nav button {
-            background: rgba(0, 0, 0, 0.6);
-            color: #00ffff;
-            border: 1px solid #00ffff;
-            padding: 10px 15px;
-            cursor: pointer;
-            box-shadow: 0 0 10px #00ffff;
-            transition: 0.3s;
-        }
-
-        nav button:hover {
-            background: #00ffff;
-            color: black;
-            box-shadow: 0 0 20px #00ffff;
-        }
-
-        /* Sections */
-        section {
-            display: none;
-            padding: 100px 20px 40px;
-            margin: 40px auto;
-            width: 80%;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid #00ffff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px #00ffff;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s, transform 0.8s;
-        }
-
-        section.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        h1, h2, p {
-            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
-        }
-
-        /* Tables */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #00ffff;
-            border: 1px solid #00ffff;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #00ffff;
-        }
-
-        /* Games */
-        .game-card {
-            display: inline-block;
-            background: rgba(0,0,0,0.7);
-            border: 1px solid #00ffff;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .game-card:hover {
-            background: #00ffff;
-            color: black;
-            box-shadow: 0 0 20px #00ffff;
-        }
-
-        #game-board div {
-            width: 80px; height: 80px;
-            background: #00ffff;
-            color: black;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px;
-            cursor: pointer;
-            border-radius: 10px;
-        }
-
-        /* Chatbot */
-        #chatbot {
+        /* Particle background (simple CSS animation) */
+        .particles {
             position: fixed;
-            bottom: 70px;
-            right: -300px;
-            width: 250px;
-            background: white;
-            color: black;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            transition: right 0.4s ease;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBg 10s linear infinite;
+            z-index: -1;
         }
-
-        #chatbot.open { right: 20px; }
-        #chatbox { height: 200px; overflow-y: auto; padding: 10px; font-size: 14px; }
-        #userInput { width: 100%; padding: 10px; border: none; border-top: 1px solid #ccc; box-sizing: border-box; }
-
-        #botButton {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 15px;
-            background: black;
-            color: #00ffff;
-            border: 1px solid #00ffff;
-            cursor: pointer;
-            box-shadow: 0 0 10px #00ffff;
-        }
-
-        /* Back to Top */
-        #backToTop {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            padding: 10px 15px;
-            background: black;
-            color: #00ffff;
-            border: 1px solid #00ffff;
-            cursor: pointer;
-            box-shadow: 0 0 10px #00ffff;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        #backToTop.visible { opacity: 1; }
-
-        /* Footer */
-        footer {
-            background: rgba(0, 0, 0, 0.7);
-            border-top: 1px solid #00ffff;
-            color: #00ffff;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
+        @keyframes moveBg {
+            from {background-position: 0 0;}
+            to {background-position: 100px 100px;}
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">Initializing Interface...</div>
-
-    <!-- Background -->
-    <div class="background-lines"></div>
-
-    <!-- Navigation -->
-    <nav>
-        <button onclick="showSection('home')">Home</button>
-        <button onclick="showSection('essentials')">Essentials</button>
-        <button onclick="showSection('games')">Games</button>
-        <button onclick="showSection('bot-section')">School Bot</button>
-    </nav>
+    <div class="particles"></div>
 
     <!-- Sections -->
-    <section id="home" class="active">
+    <div id="intro" class="section active">
         <h1>Welcome to LearnSmart</h1>
-        <h2>How Teachers Calculate Your Grades</h2>
-        <table>
-            <tr><th>Component</th><th>Weight</th></tr>
-            <tr><td>Written Works</td><td>30%</td></tr>
-            <tr><td>Performance Tasks</td><td>50%</td></tr>
-            <tr><td>Quarterly Assessment</td><td>20%</td></tr>
-        </table>
-        <p>Your grade is calculated by multiplying each component score by its weight and adding the results.</p>
-    </section>
-
-    <section id="essentials">
-        <h2>Essential School Information</h2>
-        <ul style="list-style:none; padding:0;">
-            <li>Bring all necessary materials: notebooks, pens, and ID.</li>
-            <li>Manage your time: make a study schedule and stick to it.</li>
-            <li>Participate actively in class for better understanding.</li>
-            <li>Review lessons regularly to avoid cramming.</li>
-            <li>Take care of your health: sleep well and eat properly.</li>
-        </ul>
-    </section>
-
-    <section id="games">
-        <h2>Choose a Game</h2>
-        <div class="game-card" onclick="startMemoryGame()">Memory Game</div>
-        <div class="game-card" onclick="startQuiz()">Quiz Game</div>
-
-        <!-- Game Containers -->
-        <div id="memory-game" style="display:none;">
-            <h2>Memory Game</h2>
-            <p>Match all the pairs!</p>
-            <div id="game-board" style="display:grid; grid-template-columns: repeat(4, 80px); gap:10px; justify-content:center; margin-top:1rem;"></div>
-            <p id="status" style="font-weight:bold; margin-top:1rem;"></p>
-        </div>
-
-        <div id="quiz-game" style="display:none;">
-            <h2>Quiz Game</h2>
-            <p id="quiz-question"></p>
-            <div id="quiz-options"></div>
-            <p id="quiz-score"></p>
-        </div>
-    </section>
-
-    <section id="bot-section">
-        <h2>School Bot</h2>
-        <p>Click the button at the bottom right to open the chatbot.</p>
-    </section>
-
-    <!-- Chatbot -->
-    <button id="botButton" onclick="toggleBot()">Open School Bot</button>
-    <div id="chatbot">
-        <div style="background:#4CAF50; color:white; padding:10px; border-radius:10px 10px 0 0;">School Bot</div>
-        <div id="chatbox">
-            <div><b>Bot:</b> Before we start, answer this: Who is Carl Panganiban?</div>
-        </div>
-        <input id="userInput" type="text" placeholder="Type your answer..." disabled>
+        <p>Enter your name to begin:</p>
+        <input type="text" id="username" placeholder="Your name">
+        <button onclick="startMission()">Start</button>
     </div>
 
-    <!-- Back to Top -->
-    <button id="backToTop" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑ Top</button>
+    <div id="grades" class="section">
+        <h2>Mission 1: Calculate Your Grades</h2>
+        <p>Formula: (WW × 0.30) + (PT × 0.50) + (QA × 0.20)</p>
+        <input type="number" id="ww" placeholder="Written Works (0-100)">
+        <input type="number" id="pt" placeholder="Performance Tasks (0-100)">
+        <input type="number" id="qa" placeholder="Quarterly Assessment (0-100)">
+        <button onclick="calculateGrade()">Calculate</button>
+        <p id="gradeResult"></p>
+        <button onclick="nextMission('essentials')">Next Mission</button>
+    </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2025 LearnSmart | Futuristic School Hub</p>
-    </footer>
+    <div id="essentials" class="section">
+        <h2>Mission 2: Essential School Tips</h2>
+        <ul style="text-align:left;display:inline-block;">
+            <li>Bring all necessary materials.</li>
+            <li>Manage your time effectively.</li>
+            <li>Participate actively in class.</li>
+            <li>Review lessons regularly.</li>
+            <li>Take care of your health.</li>
+        </ul>
+        <button onclick="nextMission('facts')">Next Mission</button>
+    </div>
+
+    <div id="facts" class="section">
+        <h2>Mission 3: Unlimited Facts</h2>
+        <p id="factDisplay">Tap for a fact!</p>
+        <button onclick="showFact()">New Fact</button>
+        <button onclick="nextMission('games')">Next Mission</button>
+    </div>
+
+    <div id="games" class="section">
+        <h2>Mission 4: Fun Games</h2>
+        <button onclick="playMemory()">Play Memory Game</button>
+        <button onclick="playQuiz()">Take a Quick Quiz</button>
+        <button onclick="nextMission('chatbot')">Final Mission</button>
+        <p id="gameArea"></p>
+    </div>
+
+    <div id="chatbot" class="section">
+        <h2>Final Mission: School Bot</h2>
+        <div id="chatbox" style="background:white;color:black;padding:10px;height:200px;overflow-y:auto;border-radius:10px;"></div>
+        <input type="text" id="userInput" placeholder="Type here..." disabled>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div id="nav">
+        <button onclick="goTo('intro')">Intro</button>
+        <button onclick="goTo('grades')">Grades</button>
+        <button onclick="goTo('essentials')">Tips</button>
+        <button onclick="goTo('facts')">Facts</button>
+        <button onclick="goTo('games')">Games</button>
+        <button onclick="goTo('chatbot')">Bot</button>
+    </div>
 
     <script>
-        // Show Section
-        function showSection(id) {
-            document.querySelectorAll('section').forEach(sec => {
-                sec.classList.remove('active');
-            });
-            document.getElementById(id).classList.add('active');
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-
-        // Back to Top
-        window.addEventListener('scroll', () => {
-            document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 300);
-        });
-
-        // Memory Game
-        function startMemoryGame() {
-            document.getElementById('memory-game').style.display = 'block';
-            document.getElementById('quiz-game').style.display = 'none';
-            const cardsArray = ['A','A','B','B','C','C','D','D'];
-            let shuffled = cardsArray.sort(() => 0.5 - Math.random());
-            let firstCard = null, secondCard = null, matchedPairs = 0;
-            const gameBoard = document.getElementById('game-board');
-            const status = document.getElementById('status');
-            gameBoard.innerHTML = '';
-            status.textContent = '';
-            shuffled.forEach(letter => {
-                const card = document.createElement('div');
-                card.textContent = '';
-                card.dataset.letter = letter;
-                card.dataset.flipped = 'false';
-                card.addEventListener('click', () => flipCard(card));
-                gameBoard.appendChild(card);
-            });
-            function flipCard(card) {
-                if (card.dataset.flipped === 'true' || secondCard) return;
-                card.textContent = card.dataset.letter;
-                card.dataset.flipped = 'true';
-                if (!firstCard) firstCard = card;
-                else {
-                    secondCard = card;
-                    setTimeout(() => {
-                        if (firstCard.dataset.letter === secondCard.dataset.letter) {
-                            matchedPairs++;
-                            if (matchedPairs === cardsArray.length / 2) status.textContent = "You win!";
-                        } else {
-                            firstCard.textContent = '';
-                            secondCard.textContent = '';
-                            firstCard.dataset.flipped = 'false';
-                            secondCard.dataset.flipped = 'false';
-                        }
-                        firstCard = null;
-                        secondCard = null;
-                    }, 700);
-                }
-            }
-        }
-
-        // Quiz Game
-        const quizQuestions = [
-            { q: "What is 2+2?", options: ["3","4","5"], correct: 1 },
-            { q: "What is the capital of the Philippines?", options: ["Manila","Cebu","Davao"], correct: 0 }
-        ];
-        let quizIndex = 0, score = 0;
-        function startQuiz() {
-            document.getElementById('quiz-game').style.display = 'block';
-            document.getElementById('memory-game').style.display = 'none';
-            quizIndex = 0; score = 0;
-            showQuizQuestion();
-        }
-        function showQuizQuestion() {
-            const q = quizQuestions[quizIndex];
-            document.getElementById('quiz-question').textContent = q.q;
-            const optionsDiv = document.getElementById('quiz-options');
-            optionsDiv.innerHTML = '';
-            q.options.forEach((opt, i) => {
-                const btn = document.createElement('button');
-                btn.textContent = opt;
-                btn.onclick = () => checkAnswer(i);
-                optionsDiv.appendChild(btn);
-            });
-            document.getElementById('quiz-score').textContent = `Score: ${score}`;
-        }
-        function checkAnswer(i) {
-            if (i === quizQuestions[quizIndex].correct) score++;
-            quizIndex++;
-            if (quizIndex < quizQuestions.length) showQuizQuestion();
-            else document.getElementById('quiz-score').textContent = `Final Score: ${score}/${quizQuestions.length}`;
-        }
-
-        // Chatbot
+        let currentUser = '';
         let verified = false;
-        const chatbox = document.getElementById('chatbox');
-        const userInput = document.getElementById('userInput');
-        function toggleBot() {
-            const bot = document.getElementById('chatbot');
-            const button = document.getElementById('botButton');
-            bot.classList.toggle('open');
-            button.textContent = bot.classList.contains('open') ? "Close School Bot" : "Open School Bot";
-            if (!verified) userInput.disabled = false;
+        const facts = [
+            "Did you know? Your brain uses about 20% of your body’s energy.",
+            "Writing notes by hand can improve memory retention.",
+            "Pomodoro Technique: 25 minutes study, 5 minutes break boosts focus.",
+            "Water makes up about 73% of the human brain.",
+            "The longest recorded lecture lasted 139 hours!"
+        ];
+
+        function startMission() {
+            currentUser = document.getElementById('username').value || 'Student';
+            document.getElementById('intro').innerHTML = `<h1>Welcome, ${currentUser}!</h1><p>Get ready for Mission 1.</p><button onclick="goTo('grades')">Begin Mission 1</button>`;
         }
-        userInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && userInput.value.trim() !== '') {
-                let message = userInput.value.trim();
-                chatbox.innerHTML += `<div><b>You:</b> ${message}</div>`;
-                userInput.value = '';
-                if (!verified) {
-                    if (message.toLowerCase() === "teacher" || message.toLowerCase() === "sir carl panganiban") {
-                        chatbox.innerHTML += `<div><b>Bot:</b> Correct! You may now ask me anything about school.</div>`;
-                        verified = true;
-                    } else {
-                        chatbox.innerHTML += `<div><b>Bot:</b> Wrong answer. Try again: Who is Carl Panganiban?</div>`;
-                    }
-                } else {
-                    let answer = "I don't understand that question.";
-                    if (message.toLowerCase().includes("grades")) answer = "Teachers calculate grades using Written Works (30%), Performance Tasks (50%), and Quarterly Assessment (20%).";
-                    else if (message.toLowerCase().includes("study tips")) answer = "Review regularly, manage your time, and get enough sleep.";
-                    else if (message.toLowerCase().includes("hello")) answer = "Hello! How can I help you with school today?";
-                    chatbox.innerHTML += `<div><b>Bot:</b> ${answer}</div>`;
-                    chatbox.scrollTop = chatbox.scrollHeight;
-                }
-            }
-        });
+
+        function calculateGrade() {
+            let ww = parseFloat(document.getElementById('ww').value) || 0;
+            let pt = parseFloat(document.getElementById('pt').value) || 0;
+            let qa = parseFloat(document.getElementById('qa').value) || 0;
+            let result = (ww*0.3) + (pt*0.5) + (qa*0.2);
+            document.getElementById('gradeResult').innerText = `Your Final Grade: ${result.toFixed(2)}`;
+        }
+
+        function showFact() {
+            let randomFact = facts[Math.floor(Math.random()*facts.length)];
+            document.getElementById('factDisplay').innerText = randomFact;
+        }
+
+        function playMemory() {
+            document.getElementById('gameArea').innerText = "Memory Game coming soon!";
+        }
+
+        function playQuiz() {
+            document.getElementById('gameArea').innerText = "Quiz feature coming soon!";
+        }
+
+        function nextMission(next) { goTo(next); }
+
+        function goTo(section) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+        }
     </script>
 </body>
 </html>
