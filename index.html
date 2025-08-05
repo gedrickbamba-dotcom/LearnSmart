@@ -220,8 +220,17 @@
         }
     });
 
-    // Disable input until verification
-    userInput.disabled = true;
+    const chatbox = document.getElementById('chatbox');
+const userInput = document.getElementById('userInput');
+
+userInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && userInput.value.trim() !== '') {
+        // Handle verification and responses here
+    }
+});
+
+// Disable input until verification
+userInput.disabled = true;
 </script
     <section id="memory-game" style="text-align:center; padding:2rem;">
     <h2>Memory Game</h2>
