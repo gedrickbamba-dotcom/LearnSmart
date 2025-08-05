@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Portal</title>
+<title>Student Hub</title>
 <style>
     body {
         margin: 0;
         font-family: Arial, sans-serif;
-        background: #f4f4f4;
+        background: #f9f9f9;
         color: #333;
     }
     header, section {
@@ -16,170 +16,155 @@
         max-width: 800px;
         margin: auto;
     }
-    h1 { text-align: center; }
-    nav {
-        text-align: center;
-        margin-bottom: 20px;
+    .card {
+        background: white;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    nav a {
-        margin: 0 10px;
-        text-decoration: none;
-        color: #4CAF50;
-        font-weight: bold;
-    }
-
-    /* Prank Overlay */
     #prankOverlay {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
         background: black;
+        color: lime;
         display: none;
         z-index: 9999;
+        overflow: hidden;
     }
-
-    /* Matrix Canvas */
-    #matrixCanvas {
+    canvas {
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
     }
-
-    /* Hacker Video */
     #hackerVideo {
         position: absolute;
-        top: 20%;
+        top: 30%;
         left: 50%;
         transform: translateX(-50%);
-        width: 70%;
+        width: 80%;
         max-width: 400px;
-        border: 3px solid #00ff00;
         display: none;
-        z-index: 10001;
+        z-index: 10000;
     }
-
-    /* Hacked Message */
-    #hackedMessage {
+    #finalMessage {
         position: absolute;
-        top: 40%;
-        width: 100%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         text-align: center;
         color: red;
-        font-size: 28px;
-        font-weight: bold;
+        font-size: 2em;
         display: none;
-        z-index: 10002;
     }
-
-    /* Image */
-    #hackedImage {
-        display: none;
-        position: absolute;
-        bottom: 10%;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 200px;
-        border: 3px solid red;
-        z-index: 10003;
+    #finalMessage img {
+        max-width: 200px;
+        margin-top: 10px;
     }
 </style>
 </head>
 <body>
+    <!-- Student Site -->
+    <header>
+        <h1>Welcome to Student Hub</h1>
+        <p>Your one-stop guide for school tips and resources.</p>
+    </header>
+    <section class="card">
+        <h2>Study Tips</h2>
+        <p>Focus for 25 minutes, then take a 5-minute break. Repeat 4 times for better retention.</p>
+    </section>
+    <section class="card">
+        <h2>Notes</h2>
+        <textarea style="width:100%; height:100px;"></textarea>
+    </section>
 
-<header>
-    <h1>Welcome to the Student Portal</h1>
-    <nav>
-        <a href="#">Grades</a>
-        <a href="#">Assignments</a>
-        <a href="#">Resources</a>
-    </nav>
-</header>
-
-<section>
-    <h2>Dashboard</h2>
-    <p>This portal helps you track your performance and access study materials.</p>
-</section>
-
-<!-- Prank Overlay -->
-<div id="prankOverlay">
-    <canvas id="matrixCanvas"></canvas>
-    <video id="hackerVideo" src="mixkit-hacker-with-a-digital-glitch-over-his-face-46627-hd-ready.mp4"></video>
-    <div id="hackedMessage">CONGRATULATIONS, YOU'VE BEEN HACKED!</div>
-    <img id="hackedImage" src="IMG_20250804_233522.jpg" alt="Prank Image">
-    <audio id="hackerAudio" src="whispered-hello-goodbye-german-english-31467.mp3"></audio>
-</div>
+    <!-- Prank Overlay -->
+    <div id="prankOverlay">
+        <canvas id="matrixCanvas"></canvas>
+        <video id="hackerVideo" autoplay muted></video>
+        <audio id="hackerAudio"></audio>
+        <div id="finalMessage">
+            <p>CONGRATULATIONS, YOU'VE BEEN HACKED!</p>
+            <img id="finalImage" alt="Prank Image">
+        </div>
+    </div>
 
 <script>
-    let prankPlayed = false;
-    document.addEventListener("click", () => {
-        if (!prankPlayed) {
-            prankPlayed = true;
-        } else if (prankPlayed && !localStorage.getItem('prankDone')) {
-            startPrank();
-            localStorage.setItem('prankDone', 'true');
-        }
-    });
+    // Raw GitHub links
+    const videoURL = "https://raw.githubusercontent.com/gedrickbamba-dotcom/LearnSmart/main/mixkit-hacker-with-a-digital-glitch-over-his-face-46627-hd-ready.mp4";
+    const audioURL = "https://raw.githubusercontent.com/gedrickbamba-dotcom/LearnSmart/main/whispered-hello-goodbye-german-english-31467.mp3";
+    const imageURL = "https://raw.githubusercontent.com/gedrickbamba-dotcom/LearnSmart/main/IMG_20250804_233522.jpg";
 
-    function startPrank() {
-        const overlay = document.getElementById("prankOverlay");
-        const video = document.getElementById("hackerVideo");
-        const audio = document.getElementById("hackerAudio");
-        const message = document.getElementById("hackedMessage");
-        const image = document.getElementById("hackedImage");
-        const canvas = document.getElementById("matrixCanvas");
-        const ctx = canvas.getContext("2d");
+    // Setup prank elements
+    const overlay = document.getElementById('prankOverlay');
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+    const hackerVideo = document.getElementById('hackerVideo');
+    const hackerAudio = document.getElementById('hackerAudio');
+    const finalMessage = document.getElementById('finalMessage');
+    const finalImage = document.getElementById('finalImage');
 
-        overlay.style.display = "block";
+    hackerVideo.src = videoURL;
+    hackerAudio.src = audioURL;
+    finalImage.src = imageURL;
+
+    // Resize canvas to full screen
+    function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
-        // Matrix effect
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%";
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(1);
+    // Matrix effect
+    const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const fontSize = 16;
+    const columns = Math.floor(window.innerWidth / fontSize);
+    const drops = Array(columns).fill(1);
 
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#0F0";
-            ctx.font = fontSize + "px monospace";
-            for (let i = 0; i < drops.length; i++) {
-                const text = letters.charAt(Math.floor(Math.random() * letters.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0F0";
+        ctx.font = fontSize + "px monospace";
+        for (let i = 0; i < drops.length; i++) {
+            const text = letters[Math.floor(Math.random() * letters.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
         }
-        const matrixInterval = setInterval(drawMatrix, 35);
+    }
 
-        // Play video & audio
-        video.style.display = "block";
-        video.play();
-        audio.play();
+    let matrixInterval;
 
-        // End prank when video ends
-        video.onended = () => {
+    function startPrank() {
+        overlay.style.display = 'block';
+        matrixInterval = setInterval(drawMatrix, 50);
+
+        setTimeout(() => {
+            hackerVideo.style.display = 'block';
+            hackerAudio.play();
+        }, 2000);
+
+        hackerVideo.onended = () => {
+            hackerVideo.style.display = 'none';
+            hackerAudio.pause();
             clearInterval(matrixInterval);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            video.style.display = "none";
-            audio.pause();
-            audio.currentTime = 0;
-            message.style.display = "block";
-            image.style.display = "block";
-
+            finalMessage.style.display = 'block';
             setTimeout(() => {
-                overlay.style.display = "none";
-            }, 3000);
+                overlay.style.display = 'none';
+                finalMessage.style.display = 'none';
+            }, 4000);
         };
     }
-</script>
 
+    // Trigger prank on second click
+    let clickCount = 0;
+    document.body.addEventListener('click', () => {
+        clickCount++;
+        if (clickCount === 2) startPrank();
+    });
+</script>
 </body>
 </html>
