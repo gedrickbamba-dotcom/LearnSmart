@@ -5,139 +5,153 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Student Portal</title>
 <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    header, section { padding: 20px; max-width: 800px; margin: auto; }
-    button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    body { margin: 0; font-family: Arial, sans-serif; }
+    header { background: #4CAF50; color: white; text-align: center; padding: 15px; }
+    section { padding: 20px; max-width: 600px; margin: auto; }
+    textarea { width: 100%; height: 100px; }
+    button { padding: 10px 20px; background: #4CAF50; color: white; border: none; cursor: pointer; }
 
-    /* Prank overlays */
-    #overlay, #falling, #finalMessage {
-        position: fixed; top: 0; left: 0;
+    /* Prank overlay */
+    #prankOverlay {
+        position: fixed;
+        top: 0; left: 0;
         width: 100%; height: 100%;
+        background: black;
+        color: #00ff00;
+        font-family: monospace;
         display: none;
-        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 9999;
     }
-    #overlay { background: rgba(0,0,0,0.9); color: #0f0; font-family: monospace; padding: 20px; overflow-y: auto; }
-    #keyboard { font-size: 18px; white-space: pre-wrap; }
-    #videoContainer { display: none; position: absolute; top: 20%; left: 50%; transform: translateX(-50%); }
-    #hackerVideo { width: 80%; max-width: 400px; }
-    #falling { background: black; color: #0f0; font-size: 18px; font-family: monospace; }
-    #finalMessage { background: black; color: red; text-align: center; font-size: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-    #finalMessage img { width: 80%; max-width: 300px; margin-top: 20px; }
+    #hackerVideo {
+        width: 80%;
+        max-width: 400px;
+        display: none;
+    }
+    #fallingText {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        color: #00ff00;
+        font-size: 20px;
+        white-space: pre;
+        display: none;
+    }
+    #finalMessage {
+        display: none;
+        text-align: center;
+        color: red;
+        font-size: 24px;
+        background: white;
+        padding: 20px;
+    }
+    #finalImage {
+        max-width: 200px;
+        display: block;
+        margin: 10px auto;
+    }
 </style>
 </head>
 <body>
-    <!-- Student Page -->
+    <!-- Student Site -->
     <header>
-        <h1>Student Portal</h1>
-        <p>Welcome! Check your grades, take notes, and explore study tips.</p>
-        <button onclick="triggerPrank()">Check My Grades</button>
-        <button onclick="triggerPrank()">Study Tips</button>
-        <button onclick="triggerPrank()">Notes</button>
+        <h1>Welcome to the Student Portal</h1>
     </header>
+    <section>
+        <h2>Quick Notes</h2>
+        <textarea id="notes"></textarea>
+        <button onclick="saveNotes()">Save Notes</button>
+        <p>Saved Notes:</p>
+        <p id="savedNotes"></p>
+    </section>
 
-    <!-- Prank Overlays -->
-    <div id="overlay">
-        <div id="keyboard"></div>
-        <div id="videoContainer">
-            <video id="hackerVideo" src="mixkit-hacker-with-a-digital-glitch-over-his-face-46627-hd-ready.mp4"></video>
+    <!-- Prank Overlay -->
+    <div id="prankOverlay">
+        <div id="typingText">Initializing...</div>
+        <video id="hackerVideo" src="mixkit-hacker-with-a-digital-glitch-over-his-face-46627-hd-ready.mp4"></video>
+        <div id="fallingText"></div>
+        <div id="finalMessage">
+            <p>Congratulations, You've Been Hacked!</p>
+            <img id="finalImage" src="data:image/jpeg;base64,INSERT-YOUR-IMAGE-BASE64-HERE">
         </div>
+        <audio id="hackerAudio" src="whispered-hello-goodbye-german-english-31467.mp3"></audio>
     </div>
-
-    <canvas id="falling"></canvas>
-
-    <div id="finalMessage">
-        <h1>CONGRATULATIONS! YOU'VE BEEN HACKED!</h1>
-        <img src="IMG_20250804_233522.jpg" alt="Prank Image">
-    </div>
-
-    <audio id="hackerAudio" src="whispered-hello-goodbye-german-english-31467.mp3"></audio>
 
 <script>
-let prankRunning = false;
-
-// Trigger prank
-function triggerPrank() {
-    if (prankRunning) return;
-    prankRunning = true;
-
-    document.getElementById('overlay').style.display = 'block';
-    simulateKeyboard();
-}
-
-// Simulate mobile keyboard typing
-const textToType = "Connecting to secure server...\nBypassing firewall...\nInjecting payload...\nAccessing device...\n";
-let charIndex = 0;
-function simulateKeyboard() {
-    const keyboardDiv = document.getElementById('keyboard');
-    const interval = setInterval(() => {
-        keyboardDiv.textContent += textToType[charIndex];
-        charIndex++;
-        if (charIndex >= textToType.length) {
-            clearInterval(interval);
-            showHackerVideo();
-        }
-    }, 50);
-}
-
-// Show hacker video and play audio in sync
-function showHackerVideo() {
-    const videoContainer = document.getElementById('videoContainer');
-    videoContainer.style.display = 'block';
-    const video = document.getElementById('hackerVideo');
-    const audio = document.getElementById('hackerAudio');
-
-    video.play();
-    video.onplay = () => audio.play();
-
-    video.onended = () => startFallingCode();
-}
-
-// Falling green letters
-function startFallingCode() {
-    document.getElementById('overlay').style.display = 'none';
-    const canvas = document.getElementById('falling');
-    canvas.style.display = 'block';
-    const ctx = canvas.getContext('2d');
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
-
-    function draw() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#0f0";
-        ctx.font = fontSize + "px monospace";
-
-        for (let i = 0; i < drops.length; i++) {
-            const text = letters[Math.floor(Math.random() * letters.length)];
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
-            drops[i]++;
-        }
+    // Notes Save
+    function saveNotes() {
+        const notes = document.getElementById('notes').value;
+        localStorage.setItem('notes', notes);
+        document.getElementById('savedNotes').textContent = notes;
     }
-    const matrixInterval = setInterval(draw, 33);
+    document.getElementById('savedNotes').textContent = localStorage.getItem('notes') || "";
 
-    setTimeout(() => {
-        clearInterval(matrixInterval);
-        canvas.style.display = 'none';
-        showFinalMessage();
-    }, 7000);
-}
+    // Prank Trigger
+    let clickCount = 0;
+    document.body.addEventListener('click', () => {
+        clickCount++;
+        if (clickCount === 2) startPrank();
+    });
 
-// Final message
-function showFinalMessage() {
-    const final = document.getElementById('finalMessage');
-    final.style.display = 'flex';
-    setTimeout(() => final.style.display = 'none', 4000);
-}
+    function startPrank() {
+        const overlay = document.getElementById('prankOverlay');
+        const typingText = document.getElementById('typingText');
+        const video = document.getElementById('hackerVideo');
+        const audio = document.getElementById('hackerAudio');
+        const fallingText = document.getElementById('fallingText');
+        const finalMessage = document.getElementById('finalMessage');
+
+        overlay.style.display = "flex";
+        let lines = ["Accessing system...", "Bypassing security...", "Injecting payload..."];
+        let index = 0;
+
+        function typeNextLine() {
+            if (index < lines.length) {
+                typingText.textContent += "\n" + lines[index];
+                index++;
+                setTimeout(typeNextLine, 1000);
+            } else {
+                // Show video and play audio
+                typingText.style.display = "none";
+                video.style.display = "block";
+                video.play();
+                audio.play();
+
+                video.onended = () => {
+                    video.style.display = "none";
+                    fallingText.style.display = "block";
+                    startFallingText();
+                    setTimeout(() => {
+                        fallingText.style.display = "none";
+                        audio.pause();
+                        finalMessage.style.display = "block";
+                        setTimeout(() => overlay.style.display = "none", 4000);
+                    }, 4000);
+                };
+            }
+        }
+        typeNextLine();
+    }
+
+    // Falling text effect
+    function startFallingText() {
+        const fallingText = document.getElementById('fallingText');
+        let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let interval = setInterval(() => {
+            fallingText.textContent = "";
+            for (let i = 0; i < 30; i++) {
+                let line = "";
+                for (let j = 0; j < 20; j++) {
+                    line += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                fallingText.textContent += line + "\n";
+            }
+        }, 100);
+        setTimeout(() => clearInterval(interval), 4000);
+    }
 </script>
 </body>
 </html>
