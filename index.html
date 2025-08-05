@@ -8,147 +8,156 @@
     body {
         margin: 0;
         font-family: Arial, sans-serif;
-        background: white;
-        color: #333;
-        overflow: hidden;
+        background: #f9f9f9;
+        transition: all 1s ease;
     }
-    #normalContent, #typingEffect, #hackerVideo, #codeRain, #finalMessage {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        display: none;
-        justify-content: center;
-        align-items: center;
+    header {
+        background: #4CAF50;
+        color: white;
+        text-align: center;
+        padding: 2rem;
+    }
+    section {
+        padding: 2rem;
         text-align: center;
     }
-    #normalContent { display: flex; flex-direction: column; }
-    #typingEffect {
-        font-family: monospace;
+    #hackerVideo, #matrixEffect {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 1000;
         background: black;
-        color: #0f0;
-        padding: 20px;
-        font-size: 18px;
     }
     #hackerVideo video {
+        width: 80%;
+        max-width: 500px;
+        display: block;
+        margin: auto;
+        margin-top: 20%;
+        border: 3px solid #00ff00;
+    }
+    #matrixCanvas {
         width: 100%;
         height: 100%;
-        object-fit: cover;
-    }
-    #codeRain {
-        font-family: monospace;
+        display: block;
         background: black;
-        color: #0f0;
-        font-size: 14px;
-        white-space: pre-wrap;
-        overflow-y: scroll;
-        padding: 10px;
     }
     #finalMessage {
-        flex-direction: column;
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
         background: black;
-        color: red;
-        font-size: 28px;
-        font-weight: bold;
-        animation: blink 1s infinite;
+        color: #00ff00;
+        font-size: 2rem;
+        text-align: center;
+        padding-top: 40%;
+        z-index: 2000;
     }
     #finalMessage img {
-        margin-top: 20px;
-        max-width: 200px;
-        border: 2px solid red;
-    }
-    @keyframes blink {
-        50% { opacity: 0; }
+        display: block;
+        max-width: 80%;
+        margin: 1rem auto;
     }
 </style>
 </head>
 <body>
+    <!-- Normal-looking page -->
+    <header>
+        <h1>Welcome to Student Portal</h1>
+        <p>Access your school resources here</p>
+    </header>
+    <section>
+        <p>Loading modules...</p>
+    </section>
 
-<!-- Normal-looking student page -->
-<div id="normalContent">
-    <h1>Welcome to the Student Portal</h1>
-    <p>Access your grades, notes, and school updates here.</p>
-</div>
+    <!-- Hacker Video -->
+    <div id="hackerVideo">
+        <video id="videoFile" autoplay></video>
+        <audio id="hackerAudio" autoplay></audio>
+    </div>
 
-<!-- Fake keyboard typing -->
-<div id="typingEffect"></div>
+    <!-- Matrix Effect -->
+    <div id="matrixEffect">
+        <canvas id="matrixCanvas"></canvas>
+    </div>
 
-<!-- Hacker video -->
-<div id="hackerVideo">
-    <video autoplay muted playsinline>
-        <source src="mixkit-hacker-with-a-digital-glitch-over-his-face-46627-hd-ready.mp4" type="video/mp4">
-    </video>
-</div>
-
-<!-- Code rain -->
-<div id="codeRain"></div>
-
-<!-- Final prank message -->
-<div id="finalMessage">
-    <p>CONGRATULATIONS! YOU'VE BEEN HACKED! 😂</p>
-    <img src="IMG_20250804_233522.jpg" alt="Prank Image">
-</div>
-
-<!-- Sounds -->
-<audio id="typingSound" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAgD4AAIA+AAABAAgAZGF0YUoAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA" preload="auto"></audio>
-<audio id="hackerSound" src="data:audio/wav;base64,UklGRlIAAABXQVZFZm10IBAAAAABAAEAgLsAAIAvAAABAAgAZGF0YUQAAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA==" preload="auto"></audio>
+    <!-- Final Message -->
+    <div id="finalMessage">
+        <p>CONGRATULATIONS! YOU’VE BEEN HACKED! 😂</p>
+        <img src="IMG_20250804_233522.jpg" alt="Prank Image">
+    </div>
 
 <script>
-    const typingText = [
-        "Initializing secure student portal...",
-        "Verifying credentials...",
-        "Establishing remote connection...",
-        "Accessing personal data...",
-        "Injecting backdoor...",
-        "System compromised!"
-    ];
+    // Step 1: After 5s, fake keyboard typing
+    setTimeout(() => {
+        document.body.style.background = "#000";
+        document.body.innerHTML = "<pre id='typing'></pre>";
+        const typingText = "Accessing system...\nDecrypting files...\nBypassing security...\n";
+        let index = 0;
+        const typingEl = document.getElementById('typing');
+        const typeInterval = setInterval(() => {
+            typingEl.textContent += typingText[index];
+            index++;
+            if (index >= typingText.length) {
+                clearInterval(typeInterval);
 
-    const typingDiv = document.getElementById('typingEffect');
-    const codeRain = document.getElementById('codeRain');
-    const typingSound = document.getElementById('typingSound');
-    const hackerSound = document.getElementById('hackerSound');
-
-    function startPrank() {
-        // Step 1: Show typing effect
-        document.getElementById('normalContent').style.display = "none";
-        typingDiv.style.display = "block";
-        showTypingEffect();
-    }
-
-    function showTypingEffect(index = 0) {
-        if (index < typingText.length) {
-            typingSound.currentTime = 0;
-            typingSound.play();
-            typingDiv.innerHTML += typingText[index] + "<br>";
-            setTimeout(() => showTypingEffect(index + 1), 1500);
-        } else {
-            setTimeout(() => {
-                typingDiv.style.display = "none";
-                document.getElementById('hackerVideo').style.display = "flex";
-                hackerSound.play();
-                setTimeout(showCodeRain, 5000); // show code after video plays for a while
-            }, 1000);
-        }
-    }
-
-    function showCodeRain() {
-        document.getElementById('hackerVideo').style.display = "none";
-        codeRain.style.display = "block";
-        let lines = "";
-        const interval = setInterval(() => {
-            lines += Math.random().toString(36).substring(2, 30) + "\n";
-            codeRain.textContent = lines;
-            if (lines.length > 2000) {
-                clearInterval(interval);
-                setTimeout(() => {
-                    codeRain.style.display = "none";
-                    document.getElementById('finalMessage').style.display = "flex";
-                }, 1000);
+                // Step 2: Show hacker video
+                setTimeout(showHackerVideo, 3000);
             }
-        }, 50);
+        }, 100);
+    }, 5000);
+
+    function showHackerVideo() {
+        document.body.innerHTML = "";
+        const hackerDiv = document.getElementById('hackerVideo');
+        hackerDiv.style.display = "block";
+
+        // Load video & audio
+        document.getElementById('videoFile').src = "mixkit-hacker-with-a-digital-glitch-over-his-face-46627-hd-ready.mp4";
+        document.getElementById('hackerAudio').src = "whispered-hello-goodbye-german-english-31467.mp3";
+
+        // After video ends → Matrix effect
+        document.getElementById('videoFile').onended = startMatrix;
     }
 
-    // Start prank after a short delay (looks like a normal page first)
-    setTimeout(startPrank, 3000);
+    function startMatrix() {
+        document.getElementById('hackerVideo').style.display = "none";
+        const matrixDiv = document.getElementById('matrixEffect');
+        matrixDiv.style.display = "block";
+
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        const interval = setInterval(draw, 50);
+
+        // After 7s → Final prank message
+        setTimeout(() => {
+            clearInterval(interval);
+            matrixDiv.style.display = "none";
+            document.getElementById('finalMessage').style.display = "block";
+        }, 7000);
+    }
 </script>
 </body>
 </html>
