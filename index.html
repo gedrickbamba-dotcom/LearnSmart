@@ -8,245 +8,234 @@
     body {
         margin: 0;
         font-family: Arial, sans-serif;
-        background: #f5f5f5;
-        color: #333;
+        background: #f8f8f8;
+        transition: background 0.3s;
         overflow-x: hidden;
     }
-    header, section {
-        padding: 20px;
+    header {
+        background: #4CAF50;
+        color: white;
+        padding: 15px;
         text-align: center;
     }
-    h1 { color: #4CAF50; }
-    .card {
-        background: white;
-        margin: 20px auto;
-        padding: 15px;
-        border-radius: 10px;
-        max-width: 500px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    section {
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
     }
-    /* --- PRANK OVERLAY --- */
-    #prankOverlay {
+    /* Prank Overlays */
+    #keyboardOverlay, #matrixOverlay, #hackerVideo, #finalMessage {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: black;
-        color: #00ff00;
-        font-family: monospace;
         display: none;
         z-index: 9999;
     }
-    #messageBox {
-        position: absolute;
-        bottom: 40%;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0,0,0,0.8);
-        padding: 10px;
-        border-radius: 5px;
-        width: 80%;
-        max-width: 400px;
-        font-size: 16px;
-        border: 1px solid #00ff00;
+    #keyboardOverlay {
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
-    #keyboard {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 40%;
-        background: #222;
+    #messageBox {
+        background: white;
+        padding: 10px;
+        border-top: 1px solid #ccc;
+        font-size: 16px;
+    }
+    #androidKeyboard {
+        background: #ddd;
         display: grid;
         grid-template-columns: repeat(10, 1fr);
         gap: 2px;
         padding: 5px;
+        height: 40%;
     }
-    #keyboard button {
-        background: #333;
-        color: #fff;
-        border: none;
-        font-size: 14px;
-        padding: 8px;
-        border-radius: 4px;
+    #androidKeyboard div {
+        background: white;
+        text-align: center;
+        padding: 10px;
+        border-radius: 3px;
+        font-size: 18px;
+    }
+    #matrixOverlay {
+        background: black;
+        color: lime;
+        font-family: monospace;
+        font-size: 20px;
+        overflow: hidden;
     }
     #hackerVideo {
-        position: absolute;
-        top: 50%;
-        left: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0,0,0,0.8);
+    }
+    #hackerVideo video {
         width: 80%;
         max-width: 400px;
-        transform: translate(-50%, -50%);
-        display: none;
-        border: 2px solid #00ff00;
-    }
-    #fallingCanvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: none;
+        border: 2px solid lime;
     }
     #finalMessage {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
         background: black;
-        color: red;
-        font-size: 28px;
-        font-weight: bold;
-        display: none;
-        align-items: center;
-        justify-content: center;
+        color: white;
+        display: flex;
         flex-direction: column;
-        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        text-align: center;
     }
     #finalMessage img {
-        margin-top: 20px;
-        width: 200px;
+        max-width: 300px;
+        margin-top: 15px;
     }
 </style>
 </head>
 <body>
-    <!-- STUDENT SITE -->
     <header>
         <h1>LearnSmart</h1>
-        <p>Your guide to better learning.</p>
+        <p>Your daily student guide</p>
     </header>
-    <section class="card">
-        <h2>Daily Tip</h2>
-        <p>Review your notes for 10 minutes a day to retain more information.</p>
-    </section>
-    <section class="card">
-        <h2>Notes</h2>
-        <textarea style="width:100%;height:80px;"></textarea>
+    <section>
+        <h2>Study Tips</h2>
+        <p>Stay consistent, review daily, and take breaks to improve focus.</p>
+        <h2>Assignments</h2>
+        <ul>
+            <li>Case Study – Due Tomorrow</li>
+            <li>Letter Writing – Due Tomorrow</li>
+        </ul>
     </section>
 
-    <!-- PRANK OVERLAY -->
-    <div id="prankOverlay">
-        <canvas id="fallingCanvas"></canvas>
-        <div id="messageBox"></div>
-        <div id="keyboard"></div>
-        <video id="hackerVideo">
-            <source src="https://raw.githubusercontent.com/gedrickbamba-dotcom/LearnSmart/main/mixkit-hacker-with-a-digital-glitch-over-his-face-46627-hd-ready.mp4" type="video/mp4">
-        </video>
-        <div id="finalMessage">
-            <div>CONGRATULATIONS, YOU'VE BEEN HACKED!</div>
-            <img src="https://raw.githubusercontent.com/gedrickbamba-dotcom/LearnSmart/main/IMG_20250804_233522.jpg">
-        </div>
+    <!-- PRANK OVERLAYS -->
+    <div id="keyboardOverlay">
+        <div id="messageBox"> </div>
+        <div id="androidKeyboard"></div>
+    </div>
+    <canvas id="matrixOverlay"></canvas>
+    <div id="hackerVideo">
+        <video id="hackerVid" src="https://raw.githubusercontent.com/gedrickbamba-dotcom/LearnSmart/main/mixkit-hacker-with-a-digital-glitch-over-his-face-46627-hd-ready.mp4"></video>
+    </div>
+    <div id="finalMessage">
+        <h1>Congratulations, You've Been Hacked!</h1>
+        <img src="https://raw.githubusercontent.com/gedrickbamba-dotcom/LearnSmart/main/IMG_20250804_233522.jpg">
     </div>
 
-    <!-- EMBEDDED SOUNDS -->
+    <!-- Embedded Typing Sound -->
     <audio id="clickSound">
-        <source src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAA... (truncated click sound)" type="audio/mp3">
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAgD4AAIA+AAABAAgAZGF0YUoAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA" type="audio/wav">
     </audio>
-    <audio id="hackerAudio">
-        <source src="https://raw.githubusercontent.com/gedrickbamba-dotcom/LearnSmart/main/whispered-hello-goodbye-german-english-31467.mp3" type="audio/mp3">
-    </audio>
+    <!-- Hacker Voice -->
+    <audio id="hackerAudio" src="https://raw.githubusercontent.com/gedrickbamba-dotcom/LearnSmart/main/whispered-hello-goodbye-german-english-31467.mp3"></audio>
 
 <script>
-    let prankTriggered = false;
-    let secondClick = false;
+let prankTriggered = false;
+let clickCount = 0;
 
-    // Generate fake mobile keyboard
-    const keys = "1234567890QWERTYUIOPASDFGHJKLZXCVBNM".split("");
-    const keyboard = document.getElementById("keyboard");
-    keys.forEach(k => {
-        const btn = document.createElement("button");
-        btn.textContent = k;
-        keyboard.appendChild(btn);
-    });
+// Generate Android-style keyboard
+const keys = "1234567890qwertyuiopasdfghjklzxcvbnm".split('');
+const keyboardDiv = document.getElementById("androidKeyboard");
+keys.forEach(k => {
+    const key = document.createElement("div");
+    key.textContent = k;
+    keyboardDiv.appendChild(key);
+});
 
-    // Falling letters (Matrix effect)
-    const canvas = document.getElementById("fallingCanvas");
-    const ctx = canvas.getContext("2d");
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const fontSize = 14;
-    let columns = Math.floor(canvas.width / fontSize);
-    let drops = Array(columns).fill(1);
+// Matrix Effect
+const canvas = document.getElementById('matrixOverlay');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+const drops = Array(Math.floor(columns)).fill(1);
 
-    function drawMatrix() {
-        ctx.fillStyle = "rgba(0,0,0,0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#0F0";
-        ctx.font = fontSize + "px monospace";
-        for (let i = 0; i < drops.length; i++) {
-            const text = letters[Math.floor(Math.random() * letters.length)];
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
+function drawMatrix() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#0F0';
+    ctx.font = fontSize + 'px monospace';
+    for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
         }
+        drops[i]++;
     }
-    let matrixInterval;
+}
+let matrixInterval;
 
-    // Typing effect
-    function typeText(el, text, callback) {
-        let i = 0;
-        const interval = setInterval(() => {
-            el.textContent += text[i];
-            i++;
-            if (i >= text.length) {
-                clearInterval(interval);
-                if (callback) setTimeout(callback, 500);
+// Prank Sequence
+function startPrank() {
+    if (prankTriggered) return;
+    prankTriggered = true;
+
+    // Keyboard overlay
+    document.getElementById("keyboardOverlay").style.display = "flex";
+    const messageBox = document.getElementById("messageBox");
+    const clickSound = document.getElementById("clickSound");
+    const textToType = ["Accessing system...", "Hi, you've been hacked ^_^"];
+    let currentLine = 0;
+    let charIndex = 0;
+
+    function typeMessage() {
+        if (charIndex < textToType[currentLine].length) {
+            messageBox.textContent += textToType[currentLine][charIndex];
+            clickSound.currentTime = 0;
+            clickSound.play();
+            charIndex++;
+            setTimeout(typeMessage, 150);
+        } else {
+            currentLine++;
+            if (currentLine < textToType.length) {
+                messageBox.textContent += "\n";
+                charIndex = 0;
+                setTimeout(typeMessage, 500);
+            } else {
+                setTimeout(startVideo, 1000);
             }
-        }, 100);
-    }
-
-    // Prank sequence
-    function startPrank() {
-        prankTriggered = true;
-        document.getElementById("prankOverlay").style.display = "block";
-        const msgBox = document.getElementById("messageBox");
-        msgBox.textContent = "";
-
-        // Keyboard typing simulation
-        typeText(msgBox, "Accessing system...\n", () => {
-            typeText(msgBox, "Location Detected: Visayas, Philippines\n", () => {
-                typeText(msgBox, "Hi, you've been hacked ^_^", () => {
-                    // Start hacker video + audio
-                    document.getElementById("keyboard").style.display = "none";
-                    const video = document.getElementById("hackerVideo");
-                    const audio = document.getElementById("hackerAudio");
-                    document.getElementById("fallingCanvas").style.display = "block";
-                    matrixInterval = setInterval(drawMatrix, 30);
-                    video.style.display = "block";
-                    video.play();
-                    audio.play();
-
-                    video.onended = () => {
-                        clearInterval(matrixInterval);
-                        document.getElementById("fallingCanvas").style.display = "none";
-                        video.style.display = "none";
-                        audio.pause();
-                        const finalMsg = document.getElementById("finalMessage");
-                        finalMsg.style.display = "flex";
-                        setTimeout(() => {
-                            document.getElementById("prankOverlay").style.display = "none";
-                            finalMsg.style.display = "none";
-                        }, 4000);
-                    };
-                });
-            });
-        });
-    }
-
-    // Handle clicks
-    document.body.addEventListener("click", () => {
-        if (!secondClick) {
-            secondClick = true;
-        } else if (!prankTriggered) {
-            startPrank();
         }
-    });
+    }
+    typeMessage();
+
+    // Start video after keyboard
+    function startVideo() {
+        document.getElementById("keyboardOverlay").style.display = "none";
+        document.getElementById("hackerVideo").style.display = "flex";
+        const vid = document.getElementById("hackerVid");
+        const hackerAudio = document.getElementById("hackerAudio");
+        vid.play();
+        hackerAudio.play();
+        vid.onended = () => {
+            document.getElementById("hackerVideo").style.display = "none";
+            startMatrix();
+        };
+    }
+
+    // Matrix and Final Message
+    function startMatrix() {
+        document.getElementById("matrixOverlay").style.display = "block";
+        matrixInterval = setInterval(drawMatrix, 50);
+        setTimeout(() => {
+            clearInterval(matrixInterval);
+            document.getElementById("matrixOverlay").style.display = "none";
+            document.getElementById("finalMessage").style.display = "flex";
+            setTimeout(() => {
+                document.getElementById("finalMessage").style.display = "none";
+            }, 3000);
+        }, 4000);
+    }
+}
+
+// Trigger prank on second click
+document.body.addEventListener("click", () => {
+    clickCount++;
+    if (clickCount === 2) startPrank();
+});
 </script>
 </body>
 </html>
